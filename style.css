@@ -1,0 +1,23 @@
+/*
+ Theme Name:     Nosh Child Theme
+ Theme URI:      
+ Description:    Child theme for Nosh
+ Author:         Theme Canon
+ Author URI:     http://www.themecanon.com
+ Template:       nosh
+ Version:        1.0.0
+*/
+
+@import url("../nosh/style.css");
+
+/* =Theme customization starts here
+-------------------------------------------------------------- */
+
+.widget_sp_image-description {
+  text-align: center;
+  font-size: 20px;
+}
+div#widget_sp_image-6 img {
+  width: 58%;
+  height: auto;
+}
