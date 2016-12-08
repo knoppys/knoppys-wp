@@ -2,15 +2,12 @@
 <html>
 <head>
 <title><?php bloginfo('name'); ?></title>
-<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 <meta name="viewport" content="initial-scale=1">
 <meta name="author" content="Knoppys.co.uk" >
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
 <meta http-equiv="content-style-type" content="text/css">
 <meta http-equiv="expires" content="0">
-
-<?php wp_enqueue_script('jquery'); ?>
 <?php wp_head(); ?>
 </head>
 <body>

@@ -1,7 +1,7 @@
 <?php
 
 /***************************
-* Load SCP Scripts
+* Load Styles and Scripts
 ****************************/
 function scp_front_styles() {        
 
@@ -21,6 +21,11 @@ function scp_front_scripts() {
 
 add_action( 'wp_enqueue_scripts', 'scp_front_scripts' );
 
+function insert_jquery(){
+   wp_enqueue_script('jquery');
+}
+add_filter('wp_head','insert_jquery');
+
 
 /***************************
 * Load Menus
@@ -33,17 +38,17 @@ register_nav_menus( array(
 /***************************
 * Register Sidebars
 ****************************/
-	$args1 = array(
-		'name'          => __( 'Blog Sidebar' ),
-		'id'            => 'sidebar-blog',
-		'description'   => '',
-	    'class'         => '',
-		'before_widget' => '<div id="%1$s" class="widget %2$s">',
-		'after_widget'  => '</div>',
-		'before_title'  => '<h2 class="widgettitle">',
-		'after_title'   => '</h2>' 
-	); 
-	register_sidebar( $args1 );
+$args1 = array(
+	'name'          => __( 'Blog Sidebar' ),
+	'id'            => 'sidebar-blog',
+	'description'   => '',
+    'class'         => '',
+	'before_widget' => '<div id="%1$s" class="widget %2$s">',
+	'after_widget'  => '</div>',
+	'before_title'  => '<h2 class="widgettitle">',
+	'after_title'   => '</h2>' 
+); 
+register_sidebar( $args1 );
 
 
 /***************************
@@ -260,8 +265,61 @@ class wp_bootstrap_navwalker extends Walker_Nav_Menu {
 	}
 }
 
+/*************************
+Remove those peski emojis
+*************************/
+function disable_wp_emojicons() {
+
+  // all actions related to emojis
+  remove_action( 'admin_print_styles', 'print_emoji_styles' );
+  remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+  remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+  remove_action( 'wp_print_styles', 'print_emoji_styles' );
+  remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+  remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+  remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
+
+  // filter to remove TinyMCE emojis
+  add_filter( 'tiny_mce_plugins', 'disable_emojicons_tinymce' );
+}
+add_action( 'init', 'disable_wp_emojicons' );
+
+function disable_emojicons_tinymce( $plugins ) {
+  if ( is_array( $plugins ) ) {
+    return array_diff( $plugins, array( 'wpemoji' ) );
+  } else {
+    return array();
+  }
+}
+add_filter( 'emoji_svg_url', '__return_false' );
 
 
+/*************************************
+Add the company logo to the WP Login
+*************************************/
+add_action( 'login_head', 'ilc_custom_login');
+function ilc_custom_login() {
+  echo '<style type="text/css">
+  h1 a { background-image:url('. get_stylesheet_directory_uri() . '/images/logo.png' . ') !important; margin-bottom: 10px; }
+  padding: 20px;}
+  </style>
+  <script type="text/javascript">window.onload = function(){document.getElementById("login").getElementsByTagName("a")[0].href = "'. home_url() . '";document.getElementById("login").getElementsByTagName("a")[0].title = "Go to site";}</script>';
+}
 
+/*
+Customsise the wp menu
 
-?>
+function remove_menus(){
+  
+  remove_menu_page( 'index.php' );                  
+  remove_menu_page( 'edit-comments.php' );
+  remove_menu_page( 'themes.php' );
+  remove_menu_page( 'plugins.php' );
+  remove_menu_page( 'tools.php' );
+  remove_menu_page( 'options-general.php' );
+  remove_menu_page( 'edit.php?post_type=acf' );
+  
+  
+}
+add_action( 'admin_menu', 'remove_menus' );
+*/
