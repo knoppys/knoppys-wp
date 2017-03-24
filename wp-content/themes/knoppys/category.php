@@ -1,8 +1,8 @@
 <?php get_header(); ?>
 
-	<div class="container content-area category-view">
+	<div class="container">
 		<div class="row">
-			<div class="col-sm-8" id="<?php get_the_ID(); ?>">
+			<div class="col-sm-8" id="<?php echo get_the_ID(); ?>">
 				<main>
 					<?php 
 						if ( have_posts() ) :
@@ -15,7 +15,7 @@
 									<?php if( has_post_thumbnail() ){
 										the_post_thumbnail('medium');
 									} else { ?>
-										<img src="<?php echo get_template_directory_uri(); ?>/images/camera-icon.png" alt="no-image" />
+										<img src="<?php echo get_template_directory_uri(); ?>/images/no-image.png" alt="no-image" />
 									<?php }; ?>						
 								</div>
 								<div class="col-sm-9">

@@ -4,6 +4,12 @@ ChangeLog for Knoppys Base Wordpress Install
 
 PLEASE NOTE, IF YOUR GOING TO USE THIS THEME AND EXPECT TO USE THE UPDATES, PLEASE CREATE AND USE A CHILD THEME
 
+VERSION 4
+- Updated the .htaccess file with some new hardening measures
+- Added some new functions for theme customisation and development
+- Removed some junk from the root
+- Updated single and page files. 
+
 VERSION 3
 THEME CHANGES
 
@@ -19,7 +25,7 @@ PLUGIN CHANGES
 
 Added WP-Pusher to keep the theme and any custom plugins up to date with their github or bitbucket accounts.
 
-UPCOMING FOR VERSION 4
+UPCOMING FOR VERSION 5
 THEME CHANGES
 
 In version 4 I intend to

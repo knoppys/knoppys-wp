@@ -10,9 +10,16 @@ if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 <section>
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12">
-				<?php the_content(); ?>
-			</div>
+			<article>
+				<div class="col-md-9">
+					<?php the_content(); ?>
+				</div>
+			</article>
+			<aside>
+				<div class="col-md-3">
+					<?php dynamic_sidebar('sidebar-blog'); ?>
+				</div>
+			</aside>
 		</div>
 	</div>
 </section>
