@@ -1,15 +1,48 @@
 <?php
+/***************************
+* Disable XMLRPC
+****************************/
+add_filter('xmlrpc_enabled', '__return_false');
+
+/***************************
+* Remove Wp Version Number
+****************************/
+function wpb_remove_version() {
+	return '';
+}
+add_filter('the_generator', 'wpb_remove_version');
+
+/***************************
+* Credit in the admin footer
+****************************/
+function remove_footer_admin () {
+	echo 'Fueled by <a href="http://www.wordpress.org" target="_blank">WordPress</a> | Theme By: <a href="http://www.knoppys.co.uk" target="_blank">Knoppys Digital</a></p>';
+}
+add_filter('admin_footer_text', 'remove_footer_admin');
+
+/***************************
+* Custom login error message
+****************************/
+function no_wordpress_errors(){
+  return 'Something is wrong! But we wont tell you what, the force is stronger with us.';
+}
+add_filter( 'login_errors', 'no_wordpress_errors' );
+
+/***************************
+* Remove the welcome to WordPress stuff from teh dashboard, like we dont already know we're here.
+****************************/
+remove_action('welcome_panel', 'wp_welcome_panel');
 
 /***************************
 * Load Styles and Scripts
 ****************************/
 function scp_front_styles() {        
 
-		wp_register_style( 'bootstrapcss', get_template_directory_uri() .'/css/bootstrap.min.css');
-        wp_enqueue_style( 'bootstrapcss' );
-        wp_register_style( 'styles', get_stylesheet_uri() );
-        wp_enqueue_style( 'styles' );
-     
+	wp_register_style( 'bootstrapcss', get_template_directory_uri() .'/css/bootstrap.min.css');
+    wp_enqueue_style( 'bootstrapcss' );
+    wp_register_style( 'styles', get_stylesheet_uri() );
+    wp_enqueue_style( 'styles' );
+ 
 }
 add_action( 'wp_enqueue_scripts', 'scp_front_styles' );
 
@@ -21,6 +54,9 @@ function scp_front_scripts() {
 
 add_action( 'wp_enqueue_scripts', 'scp_front_scripts' );
 
+/***************************
+* Add jQuery to the wp_head()
+****************************/
 function insert_jquery(){
    wp_enqueue_script('jquery');
 }
@@ -52,7 +88,7 @@ register_sidebar( $args1 );
 
 
 /***************************
-* Custom Excerpt
+* Custom Excerpt Length
 ****************************/
 function custom_excerpt_length( $length ) {
 	return 20;
@@ -60,6 +96,73 @@ function custom_excerpt_length( $length ) {
 add_filter( 'excerpt_length', 'custom_excerpt_length', 999 );
 
 
+/*************************
+Remove those peski emojis
+*************************/
+function disable_wp_emojicons() {
+
+  // all actions related to emojis
+  remove_action( 'admin_print_styles', 'print_emoji_styles' );
+  remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+  remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+  remove_action( 'wp_print_styles', 'print_emoji_styles' );
+  remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+  remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+  remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
+
+  // filter to remove TinyMCE emojis
+  add_filter( 'tiny_mce_plugins', 'disable_emojicons_tinymce' );
+}
+add_action( 'init', 'disable_wp_emojicons' );
+
+function disable_emojicons_tinymce( $plugins ) {
+  if ( is_array( $plugins ) ) {
+    return array_diff( $plugins, array( 'wpemoji' ) );
+  } else {
+    return array();
+  }
+}
+add_filter( 'emoji_svg_url', '__return_false' );
+
+
+/*************************************
+Add the company logo to the WP Login
+*************************************/
+add_action( 'login_head', 'ilc_custom_login');
+function ilc_custom_login() {
+  echo '<style type="text/css">
+  h1 a { background-image:url('. get_stylesheet_directory_uri() . '/images/logo.png' . ') !important; margin-bottom: 10px; }
+  padding: 20px;}
+  </style>
+  <script type="text/javascript">window.onload = function(){document.getElementById("login").getElementsByTagName("a")[0].href = "'. home_url() . '";document.getElementById("login").getElementsByTagName("a")[0].title = "Go to site";}</script>';
+}
+
+/*************************************
+Customsise the wp menu
+Add and remove links in the wp menu to give you
+a cleaner back end interface without a plugin.
+*************************************
+function remove_menus(){
+  
+  remove_menu_page( 'index.php' );                  
+  remove_menu_page( 'edit-comments.php' );
+  remove_menu_page( 'themes.php' );
+  remove_menu_page( 'plugins.php' );
+  remove_menu_page( 'tools.php' );
+  remove_menu_page( 'options-general.php' );
+  remove_menu_page( 'edit.php?post_type=acf' );
+  
+  
+}
+add_action( 'admin_menu', 'remove_menus' );
+*/
+
+
+
+
+/***************************
+* Lets not fuck with this bit.
+****************************/
 /**
  * Class Name: wp_bootstrap_navwalker
  * GitHub URI: https://github.com/twittem/wp-bootstrap-navwalker
@@ -264,62 +367,3 @@ class wp_bootstrap_navwalker extends Walker_Nav_Menu {
 		}
 	}
 }
-
-/*************************
-Remove those peski emojis
-*************************/
-function disable_wp_emojicons() {
-
-  // all actions related to emojis
-  remove_action( 'admin_print_styles', 'print_emoji_styles' );
-  remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
-  remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
-  remove_action( 'wp_print_styles', 'print_emoji_styles' );
-  remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
-  remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
-  remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
-
-  // filter to remove TinyMCE emojis
-  add_filter( 'tiny_mce_plugins', 'disable_emojicons_tinymce' );
-}
-add_action( 'init', 'disable_wp_emojicons' );
-
-function disable_emojicons_tinymce( $plugins ) {
-  if ( is_array( $plugins ) ) {
-    return array_diff( $plugins, array( 'wpemoji' ) );
-  } else {
-    return array();
-  }
-}
-add_filter( 'emoji_svg_url', '__return_false' );
-
-
-/*************************************
-Add the company logo to the WP Login
-*************************************/
-add_action( 'login_head', 'ilc_custom_login');
-function ilc_custom_login() {
-  echo '<style type="text/css">
-  h1 a { background-image:url('. get_stylesheet_directory_uri() . '/images/logo.png' . ') !important; margin-bottom: 10px; }
-  padding: 20px;}
-  </style>
-  <script type="text/javascript">window.onload = function(){document.getElementById("login").getElementsByTagName("a")[0].href = "'. home_url() . '";document.getElementById("login").getElementsByTagName("a")[0].title = "Go to site";}</script>';
-}
-
-/*
-Customsise the wp menu
-
-function remove_menus(){
-  
-  remove_menu_page( 'index.php' );                  
-  remove_menu_page( 'edit-comments.php' );
-  remove_menu_page( 'themes.php' );
-  remove_menu_page( 'plugins.php' );
-  remove_menu_page( 'tools.php' );
-  remove_menu_page( 'options-general.php' );
-  remove_menu_page( 'edit.php?post_type=acf' );
-  
-  
-}
-add_action( 'admin_menu', 'remove_menus' );
-*/

@@ -9,7 +9,7 @@
 						while ( have_posts() ) : the_post(); ?>
 
 						<div class="blog-item">
-							<div class="row">		
+							<div class="row">
 													
 								<div class="col-sm-3 post-thumbnail">
 									<?php if( has_post_thumbnail() ){
@@ -19,7 +19,6 @@
 									<?php }; ?>						
 								</div>
 								<div class="col-sm-9">
-
 									<p><strong><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></strong></p>
 									<p><?php the_excerpt(); ?></p>
 									<strong>Posted on : <?php echo get_the_date(); ?></strong>								    
@@ -39,7 +38,4 @@
 		</div>
 	</div>
 
-
-
-
-<?php get_footer(); ?>
+<?php get_footer();
