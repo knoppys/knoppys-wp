@@ -8,12 +8,12 @@ if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 	<div class="container">
 		<div class="row">
 			<article>
-				<div class="col-md-9">
-					<?php the_content(); ?>
+				<div class="col-9">
+					<?php echo get_template_part('templateparts/content-single'); ?>
 				</div>
 			</article>
 			<aside>
-				<div class="col-md-3">
+				<div class="col-3">
 					<?php dynamic_sidebar('sidebar-blog'); ?>
 				</div>
 			</aside>
