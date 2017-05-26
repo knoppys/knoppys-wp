@@ -33,11 +33,14 @@ class SiteOrigin_Widget_Hero_Widget extends SiteOrigin_Widget_Base_Slider {
 			SiteOrigin_Widgets_Bundle::single()->include_widget( 'button' );
 		}
 
+		add_filter( 'siteorigin_widgets_wrapper_classes_' . $this->id_base, array( $this, 'wrapper_class_filter' ), 10, 2 );
+		add_filter( 'siteorigin_widgets_wrapper_data_' . $this->id_base, array( $this, 'wrapper_data_filter' ), 10, 2 );
+
 		// Let the slider base class do its initialization
 		parent::initialize();
 	}
 
-	function initialize_form(){
+	function get_widget_form(){
 		return array(
 			'frames' => array(
 				'type' => 'repeater',
@@ -195,6 +198,31 @@ class SiteOrigin_Widget_Hero_Widget extends SiteOrigin_Widget_Base_Slider {
 						'type' => 'measurement',
 						'label' => __('Heading size', 'so-widgets-bundle'),
 						'default' => '38px',
+					),
+
+					'fittext' => array(
+						'type' => 'checkbox',
+						'label' => __( 'Use FitText', 'so-widgets-bundle' ),
+						'description' => __( 'Dynamically adjust your heading font size based on screen size.', 'so-widgets-bundle' ),
+						'default' => true,
+						'state_emitter' => array(
+							'callback' => 'conditional',
+							'args'     => array(
+								'use_fittext[show]: val',
+								'use_fittext[hide]: ! val'
+							),
+						),
+					),
+
+					'fittext_compressor' => array(
+						'type' => 'number',
+						'label' => __( 'FitText Compressor Strength', 'so-widgets-bundle' ),
+						'description' => __( 'How aggressively FitText should resize your heading.', 'so-widgets-bundle' ),
+						'default' => 0.85,
+						'state_handler' => array(
+							'use_fittext[show]' => array( 'show' ),
+							'use_fittext[hide]' => array( 'hide' ),
+						)
 					),
 
 					'heading_shadow' => array(
@@ -356,6 +384,28 @@ class SiteOrigin_Widget_Hero_Widget extends SiteOrigin_Widget_Base_Slider {
 		if( !empty( $font_import['css_import'] ) ) {
 			return  $font_import['css_import'];
 		}
+	}
+
+	function wrapper_class_filter( $classes, $instance ){
+		if( ! empty( $instance['design']['fittext'] ) ) {
+			$classes[] = 'so-widget-fittext-wrapper';
+			//TODO: find better way to deal with shared script dependencies like this.
+			wp_enqueue_script(
+				'sow-fittext',
+				plugin_dir_url( SOW_BUNDLE_BASE_FILE ) . 'js/sow.jquery.fittext' . SOW_BUNDLE_JS_SUFFIX . '.js',
+				array( 'jquery' ),
+				'1.2',
+				true
+			);
+		}
+		return $classes;
+	}
+
+	function wrapper_data_filter( $data, $instance ) {
+		if( ! empty( $instance['design']['fittext'] ) && ! empty( $instance['design']['fittext_compressor'] ) ) {
+			$data['fit-text-compressor'] = $instance['design']['fittext_compressor'];
+		}
+		return $data;
 	}
 
 }

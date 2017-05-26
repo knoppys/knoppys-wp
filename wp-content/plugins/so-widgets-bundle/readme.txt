@@ -1,19 +1,22 @@
 === SiteOrigin Widgets Bundle ===
 Tags: bundle, widget, button, slider, image, carousel, price table, google maps, tinymce, social links
-Requires at least: 3.9
-Tested up to: 4.5.2
-Stable tag: 1.6.1
-Build time: 2016-06-24T11:49:37+02:00
+Requires at least: 4.2
+Tested up to: 4.7.4
+Stable tag: 1.8.6
+Build time: 2017-05-11T14:22:04+02:00
 License: GPLv3 or later
 Contributors: gpriday, braam-genis
+Donate link: https://siteorigin.com/downloads/contribution/
+
+The SiteOrigin widget bundle gives you a collection of widgets that you can use and customize. All the widgets are built on our powerful framework, giving you advanced forms, unlimited colours and 1500+ icons.
 
 == Description ==
 
-[vimeo https://vimeo.com/102103379]
-
-Widgets are great. No matter where you’re using them. In a [Page Builder](http://siteorigin.com/page-builder/) page or on your widgetized areas.
-
 The SiteOrigin widget bundle gives you a collection of widgets that you can use and customize. All the widgets are built on our powerful framework, giving you advanced forms, unlimited colours and 1500+ icons.
+
+Widgets are great. No matter where you’re using them. In a [Page Builder](http://siteorigin.com/page-builder/) page or on your widgetized areas. It's even compatible with other popular page building plugins.
+
+[vimeo https://vimeo.com/102103379]
 
 The collection is growing, but here’s what we have so far.
 
@@ -50,6 +53,140 @@ The SiteOrigin Widgets Bundle is the perfect platform to build widgets for your 
 3. An example of the button widget.
 
 == Changelog ==
+
+= 1.8.6 - 10 May 2017 =
+* Editor widget supports Jetpack Markdown.
+* Editor widget global setting for enabling/disabling 'autop' by default.
+* Allow setting FitText compressor strength in hero and headline widgets.
+* Fix variable name in `enqueue_registered_styles`.
+* Fix FitText not working previews.
+
+= 1.8.5 - 27 April 2017 =
+* Fixed button hover class.
+
+= 1.8.4 - 27 April 2017 =
+* Fixed button URLs.
+* Removed image `sizes` attribute when Jetpack Photon is enabled.
+* Fixed missing widget handling for misnamed widgets.
+
+= 1.8.3 - 26 April 2017 =
+* Contact Form: Improved type Validation and added empty name check
+* Contact Form: Add Field Design Settings
+* Testimonial: Add responsive image sizes settings
+* Added checks to prevent PHP warnings
+* Improved handling of empty order fields.
+* Small code refactoring in price table widget.
+* Ensure all SiteOrigin widgets are grouped together in Page Builder.
+* Slider: Remove slider sentinel contents to avoid things like duplicated video iframe for embedded videos
+* Fix TinyMCE z-index.
+* Headline: Fixed typo that tied subheadline new window to headline
+* Ensure fittext is done before setting up hero slider.
+* Ensure google font fields work in live editors/previews.
+* Features: Allow specifying position of features widgets icons.
+* Added * next to labels of required fields.
+* Make required field indicator optional and display legend when enabled.
+* Set default color option in wpColorPicker.
+* Small refactor to make more use of `get_template_variables`.
+* Button: Added field for `rel` attribute.
+* Maps: Added setting for global Google API key.
+* Small fix to allow checkboxes to act as 'conditional' state emitters.
+* Features: Change text form field to a tinymce field
+* Properly work with new Page Builder caching system
+* Ensure footer templates only printed when editing with Elementor.
+* Small IE8 fix
+* Contact: Prevent form fields from having 0px height if no height specified.
+* Fixed Google Maps info windows.
+* Image: Don't output empty attributes.
+* Don't attempt to load maps API if already loaded.
+
+= 1.8.2 - 1 April 2017 =
+* Compatibility with upcoming Page Builder 2.5 release.
+* Fixed compatibility with Elementor 1.4+.
+* Fixed incompatibility with Jetpack.
+
+= 1.8.1 - 3 February 2017 =
+* Fixed empty array warning.
+* Contact Form: Prevent empty title markup from being echoed.
+* Contact Form: Display email after name
+* Slider: Account for 0 speed.
+* Features: Fix sizing issue when using images instead of icons.
+* Use default unit if missing for measurement fields.
+* Price Table: Shortcode support for feature text.
+* Testimonial: Updated text radius label and fixed resulting functionality.
+* Revert change made to post search for link field.
+* Link Field: Make sure we have a valid post_types value.
+
+= 1.8 - 31 January 2017 =
+* Introduced compatibility system.
+* Added compatibility with Elementor and Beaver Builder.
+* Ensure radio inputs in repeaters have their checked property set correctly.
+* Various Call to Action widget improvements.
+* Use `text-align: center;` for features icons.
+* Always use HTTPS for Google Webfonts.
+* Post Selector: Exclude current post id
+* Post Selector: Add filter returned query
+* Post Carousel: Prevent empty title output.
+* Google Maps: Add ability to set link for Static Map.
+* Social Links: Add title field and title attributes for links.
+* Features: Add title text field for features
+* Button Widget: Add Font setting
+* Contact: Add radio field Type
+* Taxonomy: New Window Setting
+* Added a way of specifying post types for link field.
+* Introduced a global widget setup action.
+
+= 1.7.2 - 09 November 2016 =
+* Made fixes to pass PHP 7 compatibility checks.
+* Image Widget: Get alt and title text from chosen image.
+* Replaced markup parser with more actively maintained one.
+* Simple Masonry: ensure resize on load
+* Image Grid: Allow 0 as valid spacing value.
+* Editor Widget: Call `WP_Embed::run_shortcode` on Editor widget content
+* Maps: Added missing `typeof` causing maps api not to load properly.
+* Icon: Fixed URL output.
+* Fixed double slash in URLs.
+* Features: Use Measurement fields.
+* Apply modify_form to form arrays created in the constructor.
+* Contact Form: add email default email subject if no subject defined.
+
+= 1.7.1 - 21 September 2016 =
+* Fixed case of Maps widget in sidebar causing an error on pages without that sidebar.
+* Fixed icon field CSS.
+
+= 1.7 - 20 September 2016 =
+* Added mechanism for creating global widget setting.
+* Added mechanism for adding dismissible notices to widget forms.
+* Unified Google Maps JS working for maps widget and contact form location field.
+* Added icon search for icon field.
+* Added remove button to icon field.
+* Contact Form: Fixed clash with Firefox field validation.
+* Properly display remove button after importing Pixabay image.
+
+= 1.6.5 - 15 August 2016 =
+* Fixed dialog z-index.
+* Added field required argument.
+* Properly trigger change for image search import.
+* Sanitize arg can now be a callback.
+* Improved multi checkbox field
+* Maps: Just call initialization function if maps API already loaded.
+
+= 1.6.4 - 21 July 2016 =
+* More settings and customizability for Headline widget.
+* Added FitText to Headline and Hero Image widgets.
+* Fixed Pixabay image importing.
+
+= 1.6.3 - 19 July 2016 =
+* Added image search functionality to media field.
+* Moved actions into their own file.
+* Allow widgets to provide their own LESS/HTML.
+* Added very simple code field.
+* Multiple widgets can have the same class. Allowing widget functionality to come from configuration.
+* Various tweaks for upcoming Widgets Builder plugin.
+
+= 1.6.2 - 11 July 2016 =
+* Fixed Firefox issue in post selector builder.
+* Properly escape all uses off add_query_arg.
+* Added filter after video
 
 = 1.6.1 - 24 June 2016 =
 * Social Links: Fixed auto-filling of network colors.

@@ -7,11 +7,6 @@ function scp_front_styles() {
 
     wp_register_style( 'style', get_stylesheet_uri() );    
     wp_enqueue_style( 'style' ); 
-
-    //minify the stylesheet
-    wp_register_style( 'style_min', get_template_directory_uri().'/styles.css' );    
-    wp_enqueue_style( 'style_min' );    
-
     wp_enqueue_script( 'scripts', get_template_directory_uri() . '/core.js', array('jquery'), '', true );
  
 }
@@ -65,21 +60,6 @@ function wpb_remove_version() {
 add_filter('the_generator', 'wpb_remove_version');
 
 /***************************
-* Add a logo to the wp customiser
-****************************/
-function themename_custom_logo_setup() {
-    $defaults = array(
-        'height'      => 100,
-        'width'       => 400,
-        'flex-height' => true,
-        'flex-width'  => true,
-        'header-text' => array( 'site-title', 'site-description' ),
-    );
-    add_theme_support( 'custom-logo', $defaults );
-}
-add_action( 'after_setup_theme', 'themename_custom_logo_setup' );
-
-/***************************
 * Credit in the admin footer
 ****************************/
 function remove_footer_admin () {
@@ -100,8 +80,6 @@ add_filter( 'login_errors', 'no_wordpress_errors' );
 ****************************/
 remove_action('welcome_panel', 'wp_welcome_panel');
 
-
-
 /***************************
 * Add jQuery to the wp_head()
 ****************************/
@@ -110,14 +88,12 @@ function insert_jquery(){
 }
 add_filter('wp_head','insert_jquery');
 
-
 /***************************
 * Load Menus
 ****************************/
 register_nav_menus( array(
 	'primary' => __( 'Primary' ),
 ) );
-
 
 /***************************
 * Register Sidebars
@@ -134,7 +110,6 @@ $args1 = array(
 ); 
 register_sidebar( $args1 );
 
-
 /***************************
 * Custom Excerpt Length
 ****************************/
@@ -142,7 +117,6 @@ function custom_excerpt_length( $length ) {
 	return 20;
 }
 add_filter( 'excerpt_length', 'custom_excerpt_length', 999 );
-
 
 /*************************
 Remove those peski emojis
@@ -172,14 +146,30 @@ function disable_emojicons_tinymce( $plugins ) {
 }
 add_filter( 'emoji_svg_url', '__return_false' );
 
+/***************************
+* Add a logo to the wp customiser
+****************************/
+function themename_custom_logo_setup() {
+    $defaults = array(
+        'height'      => 100,
+        'width'       => 400,
+        'flex-height' => true,
+        'flex-width'  => true,
+        'header-text' => array( 'site-title', 'site-description' ),
+    );
+    add_theme_support( 'custom-logo', $defaults );
+}
+add_action( 'after_setup_theme', 'themename_custom_logo_setup' );
 
 /*************************************
 Add the company logo to the WP Login
 *************************************/
 add_action( 'login_head', 'ilc_custom_login');
 function ilc_custom_login() {
+  $custom_logo_id = get_theme_mod( 'custom-logo' );
+  $logo = wp_get_attachment_image_src( $custom_logo_id , 'full' );
   echo '<style type="text/css">
-  h1 a { background-image:url('. get_stylesheet_directory_uri() . '/images/logo.png' . ') !important; margin-bottom: 10px; }
+  h1 a { background-image:url('.$logo[0].') !important; margin-bottom: 10px; }
   padding: 20px;}
   </style>
   <script type="text/javascript">window.onload = function(){document.getElementById("login").getElementsByTagName("a")[0].href = "'. home_url() . '";document.getElementById("login").getElementsByTagName("a")[0].title = "Go to site";}</script>';
@@ -189,25 +179,29 @@ function ilc_custom_login() {
 Customsise the wp menu
 Add and remove links in the wp menu to give you
 a cleaner back end interface without a plugin.
-*************************************
+**************************************/
 function remove_menus(){
   
-  remove_menu_page( 'index.php' );                  
+  //remove_menu_page( 'index.php' );                  
   remove_menu_page( 'edit-comments.php' );
-  remove_menu_page( 'themes.php' );
+  //remove_menu_page( 'themes.php' );
   remove_menu_page( 'plugins.php' );
-  remove_menu_page( 'tools.php' );
+  //remove_menu_page( 'tools.php' );
   remove_menu_page( 'options-general.php' );
   remove_menu_page( 'edit.php?post_type=acf' );
   
   
 }
 add_action( 'admin_menu', 'remove_menus' );
-*/
+
 
 /***************************
-* Ive left the Bootstrap Nav Walker as it is.
-* However Ive used the following to remove all the
+* Version 5 now uses get_nav_menu_items() insstead of wp_nav_menu()
+* so technically we dont need this.
+* It was used up to V4 with the bootstrap walker.
+* It still has benefiots if you chose to use wp_nav_menu() anywhere else so Ill leave it in.
+* **************************
+* Ive used the following to remove all the
 * junk classes wordpress adds to the tree
 ****************************/
 add_filter('nav_menu_item_id', 'clear_nav_menu_item_id', 10, 3);
@@ -236,3 +230,108 @@ function my_deregister_scripts(){
   wp_deregister_script( 'wp-embed' );
 }
 add_action( 'wp_footer', 'my_deregister_scripts' );
+
+
+/***************************
+* HTML Minify
+* This is not a 100% tested function
+* There are reports it can break on PHP7 and on 
+* caching plugins however, on basic testing it is working. 
+* You can simply comment the code out.
+****************************/
+class WP_HTML_Compression {
+    protected $compress_css = true;
+    protected $compress_js = true;
+    protected $info_comment = true;
+    protected $remove_comments = true;
+ 
+    protected $html;
+    public function __construct($html) {
+      if (!empty($html)) {
+        $this->parseHTML($html);
+      }
+    }
+    public function __toString() {
+      return $this->html;
+    }
+    protected function bottomComment($raw, $compressed) {
+      $raw = strlen($raw);
+      $compressed = strlen($compressed);    
+      $savings = ($raw-$compressed) / $raw * 100;   
+      $savings = round($savings, 2);    
+      return '<!-- HTML Minify | Gross page reduction of '.$savings.'% | From '.$raw.' Bytes, To '.$compressed.' Bytes -->';
+    }
+    protected function minifyHTML($html) {
+      $pattern = '/<(?<script>script).*?<\/script\s*>|<(?<style>style).*?<\/style\s*>|<!(?<comment>--).*?-->|<(?<tag>[\/\w.:-]*)(?:".*?"|\'.*?\'|[^\'">]+)*>|(?<text>((<[^!\/\w.:-])?[^<]*)+)|/si';
+      preg_match_all($pattern, $html, $matches, PREG_SET_ORDER);
+      $overriding = false;
+      $raw_tag = false;
+      $html = '';
+      foreach ($matches as $token) {
+        $tag = (isset($token['tag'])) ? strtolower($token['tag']) : null;
+        $content = $token[0];
+        if (is_null($tag)) {
+          if ( !empty($token['script']) ) {
+            $strip = $this->compress_js;
+          }
+          else if ( !empty($token['style']) ) {
+            $strip = $this->compress_css;
+          }
+          else if ($content == '<!--wp-html-compression no compression-->') {
+            $overriding = !$overriding;
+            continue;
+          }
+          else if ($this->remove_comments) {
+            if (!$overriding && $raw_tag != 'textarea') {
+              $content = preg_replace('/<!--(?!\s*(?:\[if [^\]]+]|<!|>))(?:(?!-->).)*-->/s', '', $content);
+            }
+          }
+        }
+        else {
+          if ($tag == 'pre' || $tag == 'textarea') {
+            $raw_tag = $tag;
+          }
+          else if ($tag == '/pre' || $tag == '/textarea') {
+            $raw_tag = false;
+          }
+          else {
+            if ($raw_tag || $overriding) {
+              $strip = false;
+            }
+            else {
+              $strip = true;
+              $content = preg_replace('/(\s+)(\w++(?<!\baction|\balt|\bcontent|\bsrc)="")/', '$1', $content);
+              $content = str_replace(' />', '/>', $content);
+            }
+          }
+        }
+        if ($strip) {
+          $content = $this->removeWhiteSpace($content);
+        }
+        $html .= $content;
+      }
+      return $html;
+    }
+    public function parseHTML($html) {
+      $this->html = $this->minifyHTML($html);
+      if ($this->info_comment) {
+        $this->html .= "\n" . $this->bottomComment($html, $this->html);
+      }
+    }
+    protected function removeWhiteSpace($str) {
+      $str = str_replace("\t", ' ', $str);
+      $str = str_replace("\n",  '', $str);
+      $str = str_replace("\r",  '', $str);
+      while (stristr($str, '  ')) {
+        $str = str_replace('  ', ' ', $str);
+      }
+      return $str;
+    }
+}
+function wp_html_compression_finish($html) {
+    return new WP_HTML_Compression($html);
+}
+function wp_html_compression_start() {
+    ob_start('wp_html_compression_finish');
+}
+add_action('get_header', 'wp_html_compression_start');

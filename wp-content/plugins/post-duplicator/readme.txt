@@ -1,8 +1,8 @@
 === Post Duplicator ===
 Contributors: metaphorcreations
 Tags: posts, post, duplicate, duplication
-Requires at least: 3.0
-Tested up to: 4.2
+Requires at least: 4.0
+Tested up to: 4.7.2
 Stable tag: /trunk/
 License: GPL2
 
@@ -41,6 +41,60 @@ Check out the 'Installation' tab.
 
 == Changelog ==
 
+= 2.20 =
+* Added "do_action( 'mtphr_post_duplicator_created', $original_id, $duplicate_id, $settings )" action for custom actions on duplicated post
+* Added "mtphr_post_duplicator_action_row_link( $post )" function for custom post action rows
+* Separated post duplicated function outsite of ajax call for custom uses
+* Removed limitations of backend script to load only on specific pages
+
+= 2.19 =
+* Added Duplicate button to published post edit pages
+
+= 2.18 =
+* Modified javascript for allow duplication of duplicated page before page reload
+
+= 2.17 =
+* XSS vulnerability fix
+* Language file updates
+
+= 2.16 =
+* Modified how post meta is saved to database
+* Modified duplicate slug implementation
+* Added file duplication support for the WP Customer Area plugin
+
+= 2.15 =
+* Added default value for duplicate post slug
+* New setting to append a custom string to the duplicate post title
+
+= 2.14 =
+* New setting to append a custom string to the duplicate post slug
+
+= 2.13 =
+* Fixed bug due to "wp_old_slug_redirect" function in core
+
+= 2.12 =
+* Fixed page reload bug after duplication
+
+= 2.11 =
+* Added ability to duplicate posts to other post types
+
+= 2.10 =
+* Added page duplication support for the WP Customer Area plugin
+
+= 2.9 =
+* Now supports multiple values of a single custom field during duplication
+
+= 2.8 =
+* Added German language files
+* Added Japanese language files
+* Updated settings file for localization
+
+= 2.7 =
+* Modified duplicated posts data: post_date_gmt, post_modified, post_modified_gmt
+
+= 2.6 =
+* Changed the default published status to Draft
+
 = 2.5 =
 * Changed the default post date of duplicated posts to be the current time.
 
@@ -70,4 +124,4 @@ Must upgrade in order for the plugin to work. The file paths where initially wro
 
 == Upgrade Notice ==
 
-Changed the default post date of duplicated posts to be the current time.
+New "mtphr_post_duplicator_created" action, function updates and additions, other updates

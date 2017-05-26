@@ -38,7 +38,7 @@ class SiteOrigin_Widget_Button_Widget extends SiteOrigin_Widget {
 		);
 	}
 
-	function initialize_form() {
+	function get_widget_form() {
 		return array(
 			'text' => array(
 				'type' => 'text',
@@ -78,29 +78,29 @@ class SiteOrigin_Widget_Button_Widget extends SiteOrigin_Widget {
 				),
 			),
 
-				'design' => array(
-					'type' => 'section',
-					'label' => __('Design and layout', 'so-widgets-bundle'),
-					'hide' => true,
-					'fields' => array(
+			'design' => array(
+				'type' => 'section',
+				'label' => __('Design and layout', 'so-widgets-bundle'),
+				'hide' => true,
+				'fields' => array(
 
-						'width' => array(
-							'type' => 'measurement',
-							'label' => __( 'Width', 'so-widgets-bundle' ),
-							'description' => __( 'Leave blank to let the button resize according to content.', 'so-widgets-bundle' )
-						),
+					'width' => array(
+						'type' => 'measurement',
+						'label' => __( 'Width', 'so-widgets-bundle' ),
+						'description' => __( 'Leave blank to let the button resize according to content.', 'so-widgets-bundle' )
+					),
 
-						'align' => array(
-							'type' => 'select',
-							'label' => __('Align', 'so-widgets-bundle'),
-							'default' => 'center',
-							'options' => array(
-								'left' => __('Left', 'so-widgets-bundle'),
-								'right' => __('Right', 'so-widgets-bundle'),
-								'center' => __('Center', 'so-widgets-bundle'),
-								'justify' => __('Justify', 'so-widgets-bundle'),
-							),
+					'align' => array(
+						'type' => 'select',
+						'label' => __('Align', 'so-widgets-bundle'),
+						'default' => 'center',
+						'options' => array(
+							'left' => __('Left', 'so-widgets-bundle'),
+							'right' => __('Right', 'so-widgets-bundle'),
+							'center' => __('Center', 'so-widgets-bundle'),
+							'justify' => __('Justify', 'so-widgets-bundle'),
 						),
+					),
 
 					'theme' => array(
 						'type' => 'select',
@@ -128,6 +128,12 @@ class SiteOrigin_Widget_Button_Widget extends SiteOrigin_Widget {
 						'type' => 'checkbox',
 						'default' => true,
 						'label' => __('Use hover effects', 'so-widgets-bundle'),
+					),
+
+					'font' => array(
+						'type' => 'font',
+						'label' => __( 'Font', 'so-widgets-bundle' ),
+						'default' => 'default'
 					),
 
 					'font_size' => array(
@@ -179,6 +185,12 @@ class SiteOrigin_Widget_Button_Widget extends SiteOrigin_Widget {
 						'description' => __('An ID attribute allows you to target this button in Javascript.', 'so-widgets-bundle'),
 					),
 
+					'classes' => array(
+						'type' => 'text',
+						'label' => __('Button Classes', 'so-widgets-bundle'),
+						'description' => __('Additional CSS classes added to the button link.', 'so-widgets-bundle'),
+					),
+
 					'title' => array(
 						'type' => 'text',
 						'label' => __('Title attribute', 'so-widgets-bundle'),
@@ -189,6 +201,12 @@ class SiteOrigin_Widget_Button_Widget extends SiteOrigin_Widget {
 						'type' => 'text',
 						'label' => __('Onclick', 'so-widgets-bundle'),
 						'description' => __('Run this Javascript when the button is clicked. Ideal for tracking.', 'so-widgets-bundle'),
+					),
+
+					'rel' => array(
+						'type' => 'text',
+						'label' => __('Rel attribute', 'so-widgets-bundle'),
+						'description' => __('Adds a rel attribute to the button link.', 'so-widgets-bundle'),
 					),
 				)
 			),
@@ -201,6 +219,65 @@ class SiteOrigin_Widget_Button_Widget extends SiteOrigin_Widget {
 	}
 
 	/**
+	 * Get the variables for the button widget.
+	 *
+	 * @param $instance
+	 * @param $args
+	 *
+	 * @return array
+	 */
+	function get_template_variables( $instance, $args ) {
+		$button_attributes = array();
+
+		$attributes = $instance['attributes'];
+		
+		$classes = ! empty( $attributes['classes'] ) ? $attributes['classes'] : '';
+		if( !empty($instance['design']['hover']) ) {
+			$classes .= ' ow-button-hover';
+		}
+		
+		if( ! empty( $classes ) ) {
+			$button_attributes['class'] = $classes;
+		}
+
+		if ( ! empty( $instance['new_window'] ) ) {
+			$button_attributes['target'] = '_blank';
+		}
+
+		if ( ! empty( $attributes['id'] ) ) {
+			$button_attributes['id'] = $attributes['id'];
+		}
+		if ( ! empty( $attributes['title'] ) ) {
+			$button_attributes['title'] = $attributes['title'];
+		}
+		if ( ! empty( $attributes['onclick'] ) ) {
+			$button_attributes['onclick'] = $attributes['onclick'];
+		}
+		if ( ! empty( $attributes['rel'] ) ) {
+			$button_attributes['rel'] = $attributes['rel'];
+		}
+
+		$icon_image_url = '';
+		if( ! empty( $instance['button_icon']['icon'] ) ) {
+			$attachment = wp_get_attachment_image_src( $instance['button_icon']['icon'] );
+
+			if ( ! empty( $attachment ) ) {
+				$icon_image_url = $attachment[0];
+			}
+		}
+
+		return array(
+			'button_attributes' => $button_attributes,
+			'href' => !empty( $instance['url'] ) ? $instance['url'] : '#',
+			'align' => $instance['design']['align'],
+			'icon_image_url' => $icon_image_url,
+			'icon' => $instance['button_icon']['icon_selected'],
+			'icon_color' => $instance['button_icon']['icon_color'],
+			'text' => $instance['text'],
+		);
+	}
+
+	/**
 	 * Get the variables that we'll be injecting into the less stylesheet.
 	 *
 	 * @param $instance
@@ -209,7 +286,8 @@ class SiteOrigin_Widget_Button_Widget extends SiteOrigin_Widget {
 	 */
 	function get_less_variables($instance){
 		if( empty( $instance ) || empty( $instance['design'] ) ) return array();
-		return array(
+
+		$less_vars = array(
 			'button_width' => isset( $instance['design']['width'] ) ? $instance['design']['width'] : '',
 			'has_button_width' => empty( $instance['design']['width'] ) ? 'false' : 'true',
 			'button_color' => $instance['design']['button_color'],
@@ -220,8 +298,22 @@ class SiteOrigin_Widget_Button_Widget extends SiteOrigin_Widget {
 			'padding' => $instance['design']['padding'] . 'em',
 			'has_text' => empty( $instance['text'] ) ? 'false' : 'true',
 		);
+
+		if ( ! empty( $instance['design']['font'] ) ) {
+			$font = siteorigin_widget_get_font( $instance['design']['font'] );
+			$less_vars['button_font'] = $font['family'];
+			if ( ! empty( $font['weight'] ) ) {
+				$less_vars['button_font_weight'] = $font['weight'];
+			}
+		}
+		return $less_vars;
 	}
 
+	function get_google_font_fields( $instance ) {
+		return array(
+			$instance['design']['font'],
+		);
+	}
 	/**
 	 * Make sure the instance is the most up to date version.
 	 *

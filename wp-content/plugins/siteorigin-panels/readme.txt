@@ -1,25 +1,25 @@
 === Page Builder by SiteOrigin ===
 Tags: page builder, responsive, widget, widgets, builder, page, admin, gallery, content, cms, pages, post, css, layout, grid
-Requires at least: 4.0
-Tested up to: 4.5.2
-Stable tag: 2.4.10
-Build time: 2016-07-04T11:29:25+02:00
+Requires at least: 4.4
+Tested up to: 4.7.3
+Stable tag: 2.5.3
+Build time: 2017-05-11T14:23:19+02:00
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
-Donate link: http://siteorigin.com/page-builder/#donate
+Donate link: https://siteorigin.com/downloads/contribution/
 Contributors: gpriday, braam-genis
 
 Build responsive page layouts using the widgets you know and love using this simple drag and drop page builder.
 
 == Description ==
 
-[vimeo https://vimeo.com/114529361]
-
-Page Builder by SiteOrigin is the most popular page creation plugin for WordPress. It makes it easy to create responsive column based content, using the widgets you know and love. Your content will accurately adapt to all mobile devices, ensuring your site is mobile-ready. Read more on [SiteOrigin](https://siteorigin.com/page-builder/).
+SiteOrigin Page Builder is the most popular page creation plugin for WordPress. It makes it easy to create responsive column based content, using the widgets you know and love. Your content will accurately adapt to all mobile devices, ensuring your site is mobile-ready. Read more on [SiteOrigin](https://siteorigin.com/page-builder/).
 
 We've created an intuitive interface that looks just like WordPress itself. It's easy to learn, so you'll be building beautiful, responsive content in no time.
 
-Page Builder works with standard WordPress widgets, so you'll always find the widget you need. We've created the SiteOrigin Widgets Bundle to give you all the most common widgets, and with a world of plugins out there, you'll always find the widget you need.
+[vimeo https://vimeo.com/114529361]
+
+Page Builder works with standard WordPress widgets, so you'll always find the widget you need. We've created the [SiteOrigin Widgets Bundle](https://wordpress.org/plugins/so-widgets-bundle/) to give you all the most common widgets, and with a world of plugins out there, you'll always find the widget you need.
 
 = It works with your theme. =
 
@@ -95,6 +95,121 @@ Page Builder is actively developed and updated, so generally I'd recommend that 
 We've tried to ensure that Page Builder is compatible with most plugin widgets. It's best to just download Page Builder and test for yourself.
 
 == Changelog ==
+
+= 2.5.3 - 9 May 2017 =
+* Added legacy function wrapper for siteorigin_panels_generate_css
+* Added more cache render checks
+* Handle translation of Learn submodule strings
+* Added screenshot argument to preview URL
+
+= 2.5.2 - 19 April 2017 =
+* Fixed RTL layouts for new flexbox layout.
+* Renamed front.css to ensure cache busting.
+* Allow cache with auto legacy layout.
+* Use HTTPS for layout directory screenshots.
+* Fixed namespaced widget escaping.
+
+= 2.5.1 - 18 April 2017 =
+* Added null function for Sydney theme compatibility.
+* Added method for including additional external layout directories.
+* Added fix for old Vantage PB layout compatibility.
+* Fixed Firefox layout issues.
+* Fixed positioning of edit row dropdown.
+* Fixed warning coming from legacy widgets.
+* Added legacy layout rendering for old browsers.
+* Switched to using calc for cell sizing.
+
+= 2.5 - 11 April 2017 =
+* Large code refactoring for improved performance.
+* Added row and widget labelling, and color labels for rows.
+* Added cell specific styling.
+* Redesign of main interface.
+* Fixed performance issues with larger pages.
+* Changed layouts to flexbox to remove need for negative margins.
+* Added various cell vertical alignment settings.
+* Add loop check to prevent rendering from running too soon.
+* Page Builder can now more easily go to and from the WordPress editor.
+* Added row and widget copy/paste. Currently only within a single site.
+* Allow row and cell styles to be edited in add row dialog.
+* Fixed visual jump before making rows full width.
+* Added option to cache generated content. Can improve compatibility with shortcode based plugins.
+* Added option to cache generated CSS in post_content. Allows page rendering without Page Builder active.
+* Fixed namespace widgets in Live Editor.
+* Increased maximum cell count to 12.
+* Added prominent legacy widgets notice.
+* Accept negative values in measurement style fields.
+* Fixed Live Editor conflict with Layout Widgets in footer.
+* Added mobile CSS style settings for rows, cells and widgets.
+* Added a mechanism for including theme layouts as JSON files.
+* Added buttons for free courses. Removed all references to premium addon.
+* Removed translation files. These will be pulled from Glotpress instead.
+* Widget update function is properly passed old widget instance.
+* Various filters added for theme/plugin developers.
+* Various minor bug fixes.
+* Various small UX tweaks and improvements.
+
+= 2.4.25 - 21 February 2017 =
+* Fixed how widget wrapper IDs are generated.
+
+= 2.4.24 - 3 February 2017 =
+* Add row ID to style wrapper instead of actual row.
+* Use more specific selectors for padding CSS.
+
+= 2.4.23 - 31 January 2017 =
+* Fixed padding issue introduced by new mobile padding setting.
+
+= 2.4.22 - 31 January 2017 =
+* Add WP Color Picker as a dependency for admin script.
+* Include and check post ID in Live Editor. Fixes some issues with widgets using the_excerpt in Live Editor.
+* Added mobile padding settings.
+* Made all learning links/buttons removable in Page Builder settings.
+
+= 2.4.21 - 19 December 2016 =
+* Removed course toolbar links.
+* Added filter for post loop query.
+* Replace TinyMCE _.isUndefined() check with a typeof to prevent JS errors.
+
+= 2.4.20 - 7 December 2016 =
+* Removed Premium and contribution links.
+* Added course links.
+
+= 2.4.19 - 22 November 2016 =
+* Added fixed background support.
+* Cycle addon and contribution link.
+* Small type and translation fixes.
+
+= 2.4.18 - 7 November 2016 =
+* Fixes for PHP 7 checker.
+* Properly provide post ID on custom home page.
+* Fixed CSS and JS URLs.
+* Corrected post__not_in issue for query builder.
+
+= 2.4.17 - 14 October 2016 =
+* Removed old Stellar JS library.
+* Added parallax setup after small timeout.
+* Added way to add affiliate ID.
+* Added tips signup link.
+
+= 2.4.16 - 27 September 2016 =
+* Added disableable upgrade notice.
+
+= 2.4.15 - 6 September 2016 =
+* Fixed legacy widgets check.
+
+= 2.4.14 - 1 September 2016 =
+* Fixes to sidebar emulator to prevent early rewrite rule building.
+* Added option to completely disable sidebar emulator.
+
+= 2.4.13 - 18 August 2016 =
+* Fixed: layout directory imports in WordPress 4.6
+
+= 2.4.12 - 17 August 2016 =
+* Fixed layout directory requests for WordPress 4.6
+
+= 2.4.11 - 15 August 2016 =
+* Added esc_url to all add_query_arg calls.
+* Improved measurement style field to handle multiple values.
+* Hide empty columns after mobile collapse.
 
 = 2.4.10 - 4 July 2016 =
 * Made Live Editor quick link optional from Page Builder settings page.

@@ -2,7 +2,7 @@
 $result = $this->contact_form_action( $instance, $instance_hash );
 
 // Display the title
-if( $instance['display_title'] ) {
+if( $instance['display_title'] && !empty( $instance['title'] ) ) {
 	echo $args['before_title'] . $instance['title'] . $args['after_title'];
 }
 $short_hash = substr( $instance_hash, 0, 4 );
@@ -28,7 +28,7 @@ else {
 		);
 	}
 	?>
-	<form action="<?php echo add_query_arg( false, false ) ?>#contact-form-<?php echo esc_attr( $short_hash ) ?>" method="POST" class="sow-contact-form" id="contact-form-<?php echo esc_attr( $short_hash ) ?>">
+	<form action="<?php echo esc_url( add_query_arg( false, false ) ) ?>#contact-form-<?php echo esc_attr( $short_hash ) ?>" method="POST" class="sow-contact-form" id="contact-form-<?php echo esc_attr( $short_hash ) ?>">
 
 		<?php if( !empty($result['errors']['_general']) ) : ?>
 			<ul class="sow-error">

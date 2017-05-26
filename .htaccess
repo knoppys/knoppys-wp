@@ -7,9 +7,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /knoppys-wp/index.php [L]
 </IfModule>
-
 # END WordPress
-
 
 # Block the include-only files.
 <IfModule mod_rewrite.c>
@@ -28,13 +26,6 @@ Order Deny,Allow
 Deny from all
 </Files>
 # FINISH XML RPC BLOCKING
-
-# Deny access to the wp-config.php file
-<files wp-config.php>
-order allow,deny
-deny from all
-</files>
-
 
 # Deny access to all .htaccess files
 <files ~ "^.*\.([Hh][Tt][Aa])">
@@ -60,4 +51,3 @@ satisfy all
 
 # Disable directory browsing
 Options All -Indexes
-
